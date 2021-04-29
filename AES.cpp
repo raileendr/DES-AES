@@ -14,12 +14,12 @@ bool AES::setKey(const unsigned char* keyArray)
 		// when decrypting, use: AES_set_decrypt_key(...)
 
 
-	// if (keyArray[0] == 0){
-			// return AES_set_encrypt_key(AES_KEY, 128, &enc_key)
+	// if ( (keyArray[0] == 0) && (keyArray[1] == 00) ){
+			// return !(AES_set_encrypt_key(AES_KEY, 128, &enc_key))
 			// this returns zero on success and a negative number on error.
 	//	} 
 	//	else {
-			// return AES_set_decrypt_key(AES_KEY, 128, &dec_key)
+			// return !(AES_set_decrypt_key(AES_KEY, 128, &dec_key))
 			// this returns zero on success and a negative number on error.
 	// }
 
