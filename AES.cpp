@@ -9,17 +9,17 @@
 bool AES::setKey(const unsigned char* keyArray)
 {
 	// TODO: AES implementation of openssl cares about whether you are encrypting or decrypting when setting the key.
-		// when encrypting, use: AES_set_encrypt_key(...)
-		// when decrypting, use: AES_set_decrypt_key(...)
+	// when encrypting, use: AES_set_encrypt_key(...)
+	// when decrypting, use: AES_set_decrypt_key(...)
 
 	// if ( (keyArray[0] == 0) && (keyArray[1] == 00) ){
-			// return !(AES_set_encrypt_key(AES_KEY, 128, &enc_key));
-			// this returns zero on success and a negative number on error.
-	//	} 
-	//	else {
-			// return !(AES_set_decrypt_key(AES_KEY, 128, &dec_key));
-			// this returns zero on success and a negative number on error.
-	//	}
+		// return !(AES_set_encrypt_key(AES_KEY, 128, &enc_key));
+		// this returns zero on success and a negative number on error.
+	// } 
+	// else {
+		// return !(AES_set_decrypt_key(AES_KEY, 128, &dec_key));
+		// this returns zero on success and a negative number on error.
+	// }
 
 
 	// NOTE** will be given a 17 byte key, where the first byte is used to indicate whether 
@@ -48,9 +48,9 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 		// string ciphertext = "";
 		// for (int i = 0; i <16; i++){
 			// ciphertext = ciphertext + dynamicPtr[i];
-		//	}
-		//	delete[] dynamicPtr;
-		// 	return ciphertext;
+		// }
+		// delete[] dynamicPtr;
+		// return ciphertext;
 
 
 	return NULL;
@@ -76,7 +76,7 @@ unsigned char* AES::decrypt(const unsigned char* cipherText)
 			// plaintext = plaintext + dynamicPtr[i];
 		// }
 		// delete[] dynamicPtr;
-		// return plaintext
+		// return plaintext;
 
 	return NULL;
 }
