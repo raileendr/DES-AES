@@ -71,7 +71,33 @@ bool AES::setKey(const unsigned char* keyArray)
 	// Both functions return 0 on success and other values on faliure.
 	// For documentation, please see https://boringssl.googlesource.com/boringssl/+/2623/include/openssl/aes.h
 	// and aes.cpp example provided with the assignment.
-	
+
+	unsigned char* aesKey = new unsigned char[16]; //16 element array to hold key
+	char* holder; //variable for block allocation
+	int count = 0;
+
+	if (aesKey[0] == 0) {
+
+		/* Set the encryption key */
+		if (AES_set_encrypt_key(aesKey, 128, &enc_key) != 0) {
+			fprintf(stderr, "AES_set_encrypt_key() failed!\n");
+			exit(-1);
+		}
+		else {
+			return true;
+		}
+	}
+	else {
+
+		/* Set the decryption key */
+		if (AES_set_decrypt_key(aesKey, 128, &dec_key) != 0) {
+			fprintf(stderr, "AES_set_decrypt_key() failed!\n");
+			exit(-1);
+		}
+		else {
+			return true;
+		}
+	}
 	
 	return false;
 	
