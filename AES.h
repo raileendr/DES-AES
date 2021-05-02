@@ -50,6 +50,9 @@ class AES: public CipherInterface
 	protected:
 
 		//TODO: declare the AES key
+		unsigned char charToHex(const char& character);
+
+		unsigned char twoCharToHexByte(const unsigned char* twoChars);
 };
 
 
