@@ -43,14 +43,13 @@ unsigned char AES::twoCharToHexByte(const unsigned char* twoChars)
 
 	return singleByte;
 }
+// ==========================================================================================================
+// ==========================================================================================================
+// ==========================================================================================================
 
-
-/** Sets the key to use
- * @param key - the first byte of this represents whether
- * to encrypt or to decrypt. 00 means encrypt and any other
- * value to decrypt.  Then come the bytes of the 128-bit key
- * (should be 16 of them).
- * @return - True if the key is valid and False otherwise */
+/** Sets the key to use  @param key - the first byte of this represents whether encrypt/decrypt. 
+ * 00 = encrypt, any other value = decrypt. Then come the bytes of the 128-bit key
+ * (should be 16 of them).  @return - True if the key is valid and False otherwise */
 bool AES::setKey(const unsigned char* keyArray)
 {
 	// AES implementation of openssl cares about whether you are encrypting or decrypting when setting the key.
@@ -65,31 +64,32 @@ bool AES::setKey(const unsigned char* keyArray)
 	int count = 0;
 	string holder = "";
 
+	// check if setKey(encryption)
 	if (keyArray[0] == 0) {
 		// Convert key to HexBytes
 		for(int i = 1; i <17; i++) {
 			aesKey[i-1] = twoCharToHexByte(keyArray[i]);
 		}
-		/* Set the encryption key */
+		// Set the encryption key (and error check)
 		if (AES_set_encrypt_key(aesKey, 128, &enc_key) != 0) {
 			fprintf(stderr, "AES_set_encrypt_key() failed!\n");
-			exit(-1);
-			//TODO return false???
+			return false;
 		}
 		else {
 			return true;
 		}
 	}
+	// else, setKey(decryption)
 	else {
+		// Convert key to HexBytes
 		for(int i = 1; i <17; i++) {
 			aesKey[i-1] = twoCharToHexByte(keyArray[i]);
 		}
-		/* Set the decryption key */
+		// Set the decryption key (and error check)
 		if (AES_set_decrypt_key(aesKey, 128, &dec_key) != 0)
 		{
 			fprintf(stderr, "AES_set_decrypt_key() failed!\n");
-			exit(-1);
-			//TODO return false???
+			return false
 		}
 		else {
 			return true;
@@ -102,13 +102,13 @@ bool AES::setKey(const unsigned char* keyArray)
  * @return - the encrypted ciphertext string */
 unsigned char* AES::encrypt(const unsigned char* plainText)
 {
-    // 1. Dynamically allocate a block to store the ciphertext.
+	// 1. Dynamically allocate a block to store the ciphertext.
 	unsigned char holder[16] = *plainText;
-    unsigned char* enc_out = new unsigned char[16];
+    	unsigned char* enc_out = new unsigned char[16];
 
 	// Clearing memory buffer
-    memset(enc_out, 0, 16);
-    memset(holder, 0, 16);
+    	memset(enc_out, 0, 16);
+    	memset(holder, 0, 16);
     
 	
 	// 2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
@@ -116,25 +116,35 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
     
 	
 	// 3. Return the pointer to the ciphertext
-    for (int i = 0; i < 16; ++i) {
-        enc_out[i] = holder[i];
-    }
+    	for (int i = 0; i < 16; ++i) {
+        	enc_out[i] = holder[i];
+    	}
 
     return enc_out;
 }
 
-/**
- * Decrypts a string of ciphertext
+/** Decrypts a string of ciphertext
  * @param cipherText - the ciphertext
- * @return - the plaintext
- */
+ * @return - the plaintext */
 unsigned char* AES::decrypt(const unsigned char* cipherText)
 {
+	// 1. Dynamically allocate a block to store the plaintext.
+	unsigned char holder[16] = *cipherText;
+    	unsigned char* dec_out = new unsigned char[16];
 
-	//TODO: 1. Dynamically allocate a block to store the plaintext.
-	//	2. Use AES_ecb_encrypt(...) to decrypt the text (please see the URL in setKey(...)
-	//	and the aes.cpp example provided.
-	// 	3. Return the pointer to the plaintext
+	// Clearing memory buffer
+    	memset(dec_out, 0, 16);
+    	memset(holder, 0, 16);
 
-	return NULL;
+
+	// 2. Use AES_ecb_decrypt(...) to decrypt the text (please see the URL in setKey(...)
+	AES_ecb_decrypt(holder, dec_out, &dec_key, AES_DECRYPT);
+
+
+	// 3. Return the pointer to the plaintext
+	for (int i = 0; i < 16; ++i) {
+        	dec_out[i] = holder[i];
+    	}
+
+    return dec_out;
 }
