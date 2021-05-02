@@ -24,15 +24,24 @@ int main(int argc, char** argv)
 		// Set the block size to 64 bits
 		blockSize = 8;
 		cipher = new DES();
+	else if (cipherName == "AES") {
+		// Set the block size to 128 bits
+		blockSize = 16;
+		cipher = new AES();
+	}
+	else {
+		// if invalid choice
+		cout << "Invalid choice of cipher\n";
+	}
 
-		/* Error checks */
-		if(!cipher){
-			fprintf(stderr, "ERROR [%s %s %d]: could not allocate memory\n",	
-			__FILE__, __FUNCTION__, __LINE__);
-			exit(-1);
-		}
-		// setting the key (has to be casted)
-		cipher->setKey((unsigned char*)keyInput.c_str());
+	/* Error checks */
+	if(!cipher){
+		fprintf(stderr, "ERROR [%s %s %d]: could not allocate memory\n",	
+		__FILE__, __FUNCTION__, __LINE__);
+		exit(-1);
+	}
+	// setting the key (has to be casted)
+	cipher->setKey((unsigned char*)keyInput.c_str());
 	}
 	
 	unsigned char block[blockSize];
