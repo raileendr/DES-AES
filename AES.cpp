@@ -62,7 +62,6 @@ bool AES::setKey(const unsigned char* keyArray)
 	unsigned char* aesKey = new unsigned char[16]; //16 element array to hold key
 	char* holder; //variable for block allocation
 	int count = 0;
-	string holder = "";
 
 	// check if setKey(encryption)
 	if (keyArray[0] == 0) {
@@ -89,7 +88,7 @@ bool AES::setKey(const unsigned char* keyArray)
 		if (AES_set_decrypt_key(aesKey, 128, &dec_key) != 0)
 		{
 			fprintf(stderr, "AES_set_decrypt_key() failed!\n");
-			return false
+			return false;
 		}
 		else {
 			return true;
