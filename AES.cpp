@@ -56,7 +56,7 @@ unsigned char AES::twoCharToHexByte(const unsigned char* twoChars)
 
 bool AES::setKey(const unsigned char* keyArray)
 {
-	
+
 	// TODO: AES implementation of openssl cares about whether
 	// you are encrypting or decrypting when setting the key.
 	// That is, when encrypting you use function AES_set_encrypt_key(...)
@@ -75,9 +75,13 @@ bool AES::setKey(const unsigned char* keyArray)
 	unsigned char* aesKey = new unsigned char[16]; //16 element array to hold key
 	char* holder; //variable for block allocation
 	int count = 0;
+	string holder = "";
 
-	if (aesKey[0] == 0) {
-
+	if (keyArray[0] == 0) {
+		// Convert key to HexBytes
+		for(int i = 1; i <17; i++) {
+			aesKey[i-1] = twoCharToHexByte(keyArray[i]);
+		}
 		/* Set the encryption key */
 		if (AES_set_encrypt_key(aesKey, 128, &enc_key) != 0) {
 			fprintf(stderr, "AES_set_encrypt_key() failed!\n");
@@ -87,10 +91,14 @@ bool AES::setKey(const unsigned char* keyArray)
 			return true;
 		}
 	}
-	else {
-
+	else
+	{
+		for(int i = 1; i <17; i++) {
+			aesKey[i-1] = twoCharToHexByte(keyArray[i]);
+		}
 		/* Set the decryption key */
-		if (AES_set_decrypt_key(aesKey, 128, &dec_key) != 0) {
+		if (AES_set_decrypt_key(aesKey, 128, &dec_key) != 0)
+		{
 			fprintf(stderr, "AES_set_decrypt_key() failed!\n");
 			exit(-1);
 		}
@@ -98,25 +106,20 @@ bool AES::setKey(const unsigned char* keyArray)
 			return true;
 		}
 	}
-	
-	return false;
-	
 }
 
-/**	
- * Encrypts a plaintext string
+/** Encrypts a plaintext string
  * @param plaintext - the plaintext string
- * @return - the encrypted ciphertext string
- */
+ * @return - the encrypted ciphertext string */
 unsigned char* AES::encrypt(const unsigned char* plainText)
 {
-	
+
 	//TODO: 1. Dynamically allocate a block to store the ciphertext.
 	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
 	// 	3. Return the pointer to the ciphertext
-		
-	return NULL;	
+
+	return NULL;
 }
 
 /**
@@ -126,14 +129,11 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
  */
 unsigned char* AES::decrypt(const unsigned char* cipherText)
 {
-	
+
 	//TODO: 1. Dynamically allocate a block to store the plaintext.
 	//	2. Use AES_ecb_encrypt(...) to decrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
 	// 	3. Return the pointer to the plaintext
-		
+
 	return NULL;
 }
-
-
-
