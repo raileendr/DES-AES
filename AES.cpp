@@ -102,24 +102,16 @@ bool AES::setKey(const unsigned char* keyArray)
 unsigned char* AES::encrypt(const unsigned char* plainText)
 {
 	// 1. Dynamically allocate a block to store the ciphertext.
-	unsigned char holder[16] = *plainText;
-    	unsigned char* enc_out = new unsigned char[16];
+    	unsigned char enc_out = new unsigned char[16];
 
-	// Clearing memory buffer
-    	memset(enc_out, 0, 16);
-    	memset(holder, 0, 16);
-    
-	
-	// 2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
-	AES_ecb_encrypt(holder, enc_out, &enc_key, AES_ENCRYPT);
-    
-	
-	// 3. Return the pointer to the ciphertext
-    	for (int i = 0; i < 16; ++i) {
-        	enc_out[i] = holder[i];
-    	}
+	//clear memory buffer
+	memset(enc_out, 0, 16);
 
-    return enc_out;
+    	// 2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
+    	AES_ecb_encrypt(enc_out, plainText, &enc_key, AES_ENCRYPT);
+
+    	// 3. Return the pointer to the ciphertext
+    	return enc_out;
 }
 
 /** Decrypts a string of ciphertext
@@ -128,22 +120,15 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 unsigned char* AES::decrypt(const unsigned char* cipherText)
 {
 	// 1. Dynamically allocate a block to store the plaintext.
-	unsigned char holder[16] = *cipherText;
     	unsigned char* dec_out = new unsigned char[16];
 
 	// Clearing memory buffer
     	memset(dec_out, 0, 16);
-    	memset(holder, 0, 16);
-
 
 	// 2. Use AES_ecb_decrypt(...) to decrypt the text (please see the URL in setKey(...)
-	AES_ecb_decrypt(holder, dec_out, &dec_key, AES_DECRYPT);
-
+	AES_ecb_decrypt(dec_out, cipherText, &dec_key, AES_DECRYPT);
 
 	// 3. Return the pointer to the plaintext
-	for (int i = 0; i < 16; ++i) {
-        	dec_out[i] = holder[i];
-    	}
-
-    return dec_out;
+    	return dec_out;
 }
+
