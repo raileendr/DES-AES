@@ -44,33 +44,21 @@ unsigned char AES::twoCharToHexByte(const unsigned char* twoChars)
 	return singleByte;
 }
 
-/**
- * Sets the key to use
+
+/** Sets the key to use
  * @param key - the first byte of this represents whether
  * to encrypt or to decrypt. 00 means encrypt and any other
  * value to decrypt.  Then come the bytes of the 128-bit key
  * (should be 16 of them).
- * @return - True if the key is valid and False otherwise
- */
-
-
+ * @return - True if the key is valid and False otherwise */
 bool AES::setKey(const unsigned char* keyArray)
 {
-
-	// TODO: AES implementation of openssl cares about whether
-	// you are encrypting or decrypting when setting the key.
-	// That is, when encrypting you use function AES_set_encrypt_key(...)
-	// and when decrypting AES_set_decrypt_key(...).
-	//
-	// One way to solve this problem is to pass in a 17 byte key, where
-	// the first byte is used to indicate whether we are encrypting or
-	// decrypting. E.g., if the first byte is 0, then use AES_set_encrypt_key(...).
-	// Otherwise, use AES_set_decrypt_key(...).  The rest of the bytes in the
-	// array indicate the 16 bytes of the 128-bit AES key.
-	//
-	// Both functions return 0 on success and other values on faliure.
+	// AES implementation of openssl cares about whether you are encrypting or decrypting when setting the key.
+		// when encrypting, use: AES_set_encrypt_key(...)
+		// when decrypting, use: AES_set_decrypt_key(...)
+	
+	// NOTE** will be given a 17 byte key.
 	// For documentation, please see https://boringssl.googlesource.com/boringssl/+/2623/include/openssl/aes.h
-	// and aes.cpp example provided with the assignment.
 
 	unsigned char* aesKey = new unsigned char[16]; //16 element array to hold key
 	char* holder; //variable for block allocation
@@ -86,13 +74,13 @@ bool AES::setKey(const unsigned char* keyArray)
 		if (AES_set_encrypt_key(aesKey, 128, &enc_key) != 0) {
 			fprintf(stderr, "AES_set_encrypt_key() failed!\n");
 			exit(-1);
+			//TODO return false???
 		}
 		else {
 			return true;
 		}
 	}
-	else
-	{
+	else {
 		for(int i = 1; i <17; i++) {
 			aesKey[i-1] = twoCharToHexByte(keyArray[i]);
 		}
@@ -101,6 +89,7 @@ bool AES::setKey(const unsigned char* keyArray)
 		{
 			fprintf(stderr, "AES_set_decrypt_key() failed!\n");
 			exit(-1);
+			//TODO return false???
 		}
 		else {
 			return true;
@@ -113,13 +102,25 @@ bool AES::setKey(const unsigned char* keyArray)
  * @return - the encrypted ciphertext string */
 unsigned char* AES::encrypt(const unsigned char* plainText)
 {
+    // 1. Dynamically allocate a block to store the ciphertext.
+	unsigned char holder[16] = *plainText;
+    unsigned char* enc_out = new unsigned char[16];
 
-	//TODO: 1. Dynamically allocate a block to store the ciphertext.
-	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
-	//	and the aes.cpp example provided.
-	// 	3. Return the pointer to the ciphertext
+	// Clearing memory buffer
+    memset(enc_out, 0, 16);
+    memset(holder, 0, 16);
+    
+	
+	// 2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
+	AES_ecb_encrypt(holder, enc_out, &enc_key, AES_ENCRYPT);
+    
+	
+	// 3. Return the pointer to the ciphertext
+    for (int i = 0; i < 16; ++i) {
+        enc_out[i] = holder[i];
+    }
 
-	return NULL;
+    return enc_out;
 }
 
 /**
