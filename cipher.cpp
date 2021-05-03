@@ -35,6 +35,7 @@ int main(int argc, char** argv)
 		cipher->setKey((unsigned char*)keyInput.c_str());
 	}
 	else if(cipherName == "AES"){
+		// Set block size to 128 bits
 		blockSize = 16;
 		cipher = new AES();
 		if(!cipher){
