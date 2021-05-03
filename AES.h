@@ -49,7 +49,9 @@ class AES: public CipherInterface
 	/* The protected members */
 	protected:
 
-		//TODO: declare the AES key
+		//TODO: declare the AES key:
+		AES_KEY enc_key, dec_key;
+
 		unsigned char charToHex(const char& character);
 
 		unsigned char twoCharToHexByte(const unsigned char* twoChars);
