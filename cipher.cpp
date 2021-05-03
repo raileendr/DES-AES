@@ -34,6 +34,16 @@ int main(int argc, char** argv)
 		// setting the key (has to be casted)
 		cipher->setKey((unsigned char*)keyInput.c_str());
 	}
+	else if(cipherName == "AES"){
+		blockSize = 16;
+		cipher = new AES();
+		if(!cipher){
+			fprintf(stderr, "ERROR [%s %s %d]: could not allocate memory\n",	
+			__FILE__, __FUNCTION__, __LINE__);
+			exit(-1);
+		}
+		cipher->setKey((unsigned char*)keyInput.c_str());
+	}
 	
 	unsigned char block[blockSize];
 	// opens input.txt and reads the "raw bytes" (rb)
